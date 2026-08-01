@@ -441,8 +441,8 @@ const AdminDashboard = () => {
                                 </td>
                                 <td className="px-6 py-4 text-center">
                                     <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase ${s.status === 'OPEN' ? 'bg-green-100 text-green-700' :
-                                            s.status === 'AUTO_CLOSED' ? 'bg-amber-100 text-amber-700' :
-                                                'bg-slate-200 text-slate-600'
+                                        s.status === 'AUTO_CLOSED' ? 'bg-amber-100 text-amber-700' :
+                                            'bg-slate-200 text-slate-600'
                                         }`}>
                                         {s.status}
                                     </span>
@@ -615,40 +615,75 @@ const AdminDashboard = () => {
 
             {/* Main Content */}
             <div className="flex-1 h-full flex flex-col min-w-0 overflow-y-auto">
-                <header className="h-20 lg:h-24 bg-white/50 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-4 lg:px-12 sticky top-0 z-30 w-full shrink-0">
-                    <div className="flex items-center gap-4">
-                        <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden p-2 text-indigo-600 hover:bg-slate-100 rounded-xl transition">
-                            <Menu className="w-6 h-6" />
-                        </button>
-                        <h3 className="text-xl lg:text-2xl font-black text-slate-800 capitalize tracking-tight">{activeTab.includes('/') ? activeTab.split('/')[1] : activeTab}</h3>
+                <header className="sticky top-0 z-30 h-20 lg:h-24 w-full shrink-0 bg-white/50 backdrop-blur-md border-b border-slate-200 px-4 lg:px-12">
+                    <div className="flex h-full items-center justify-between gap-2">
 
-                        {!['reports', 'attendance/sessions'].includes(activeTab) && (
+                        {/* Left Section */}
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+
+                            {/* Sidebar Toggle */}
                             <button
-                                onClick={() => { setEditingItem(null); setFormData({}); setIsModalOpen(true); }}
-                                className="ml-2 lg:ml-6 bg-indigo-600 hover:bg-indigo-700 text-white px-3 lg:px-5 py-2 lg:py-2.5 rounded-xl lg:rounded-2xl shadow-xl shadow-indigo-100 transition flex items-center gap-2 group active:scale-95"
+                                onClick={() => setIsSidebarOpen(true)}
+                                className="lg:hidden shrink-0 p-2 text-indigo-600 hover:bg-slate-100 rounded-xl transition"
                             >
-                                <Plus className="w-4 h-4 lg:w-5 lg:h-5 group-hover:rotate-90 transition-transform duration-300" />
-                                <span className="text-xs lg:text-sm font-black uppercase tracking-widest">Create</span>
+                                <Menu className="w-6 h-6" />
                             </button>
-                        )}
-                    </div>
-                    <div className="flex items-center gap-4 bg-white p-2 pr-4 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div className="w-12 h-12 bg-indigo-600 rounded-xl shadow-md flex items-center justify-center text-white font-black text-lg shrink-0">
-                            {user?.name?.charAt(0)}
+
+                            {/* Page Title */}
+                            <h3 className="truncate text-lg lg:text-2xl font-black text-slate-800 capitalize tracking-tight">
+                                {activeTab.includes("/")
+                                    ? activeTab.split("/")[1]
+                                    : activeTab}
+                            </h3>
+
+                            {/* Create Button */}
+                            {!["reports", "attendance/sessions"].includes(activeTab) && (
+                                <button
+                                    onClick={() => {
+                                        setEditingItem(null);
+                                        setFormData({});
+                                        setIsModalOpen(true);
+                                    }}
+                                    className="ml-auto lg:ml-6 shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white p-2 lg:px-5 lg:py-2.5 rounded-xl lg:rounded-2xl shadow-xl shadow-indigo-100 transition flex items-center gap-2 group active:scale-95"
+                                >
+                                    <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+
+                                    <span className="hidden sm:inline text-sm font-black uppercase tracking-widest">
+                                        Create
+                                    </span>
+                                </button>
+                            )}
                         </div>
-                        <div className="text-left px-2 hidden sm:block">
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Administrator</p>
-                            <p className="text-sm font-black text-slate-800 truncate max-w-[120px]">{user?.name}</p>
-                        </div>
-                        <div className="pl-4 border-l border-slate-100 ml-2">
+
+                        {/* Right Section */}
+                        <div className="flex shrink-0 items-center gap-2 bg-white rounded-2xl border border-slate-200 shadow-sm px-2 py-2">
+
+                            {/* Avatar */}
+                            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-base lg:text-lg">
+                                {user?.name?.charAt(0)}
+                            </div>
+
+                            {/* User Info */}
+                            <div className="hidden md:block">
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                    Administrator
+                                </p>
+                                <p className="text-sm font-black text-slate-800 truncate max-w-[120px]">
+                                    {user?.name}
+                                </p>
+                            </div>
+
+                            {/* Logout */}
                             <button
                                 onClick={handleLogout}
-                                className="flex items-center justify-center p-3 text-red-500 hover:bg-red-50 rounded-xl transition group"
+                                className="p-2 lg:p-3 text-red-500 hover:bg-red-50 rounded-xl transition"
                                 title="Sign Out"
                             >
                                 <LogOut className="w-5 h-5" />
                             </button>
+
                         </div>
+
                     </div>
                 </header>
 

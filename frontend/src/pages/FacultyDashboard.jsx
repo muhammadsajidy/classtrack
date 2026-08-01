@@ -218,14 +218,14 @@ const FacultyDashboard = () => {
         try {
             const res = await api.get(`/attendance/classes/${selectedClass.id}/report`);
             const { data, columns } = res.data;
-            
+
             // Generate CSV
             const header = columns.join(',');
-            const rows = data.map(row => 
+            const rows = data.map(row =>
                 columns.map(col => `"${row[col] || ''}"`).join(',')
             );
             const csvContent = [header, ...rows].join('\n');
-            
+
             // Download file
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -248,7 +248,7 @@ const FacultyDashboard = () => {
         const element = document.getElementById('timetable-container');
         if (!element) return;
         try {
-            const dataUrl = await domToPng(element, { 
+            const dataUrl = await domToPng(element, {
                 backgroundColor: '#f8fafc',
                 scale: 2,
                 quality: 1
@@ -264,9 +264,9 @@ const FacultyDashboard = () => {
 
     const renderTimetable = () => {
         const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-        
+
         // Flatten all slots from all classes
-        const allSlots = classes.flatMap(c => 
+        const allSlots = classes.flatMap(c =>
             c.course?.slots?.map(slot => ({
                 ...slot,
                 courseName: c.course.courseName,
@@ -518,8 +518,8 @@ const FacultyDashboard = () => {
                     <p className="text-slate-500 font-medium">History for {selectedClass?.course?.courseName}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
-                    <button 
-                        onClick={downloadAttendanceReport} 
+                    <button
+                        onClick={downloadAttendanceReport}
                         disabled={processing}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 lg:px-6 py-3 rounded-2xl font-black text-sm shadow-lg shadow-emerald-100 flex items-center justify-center gap-2 transition"
                     >
@@ -551,8 +551,8 @@ const FacultyDashboard = () => {
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Attendance Trend</p>
                         <div className="flex items-end gap-1 h-12 mt-2">
                             {classStats.trend.map((s, i) => (
-                                <div 
-                                    key={i} 
+                                <div
+                                    key={i}
                                     className={`w-full ${s.percentage < 75 ? 'bg-red-200 hover:bg-red-500' : 'bg-indigo-200 hover:bg-indigo-600'} rounded-t transition-colors cursor-pointer relative group`}
                                     style={{ height: `${s.percentage}%` }}
                                 >
@@ -581,8 +581,8 @@ const FacultyDashboard = () => {
                                     <Calendar className="w-5 h-5" />
                                 </div>
                                 <span className={`px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-widest ${s.status === 'OPEN' ? 'bg-green-100 text-green-700' :
-                                        s.status === 'AUTO_CLOSED' ? 'bg-amber-100 text-amber-700' :
-                                            'bg-slate-200 text-slate-600'
+                                    s.status === 'AUTO_CLOSED' ? 'bg-amber-100 text-amber-700' :
+                                        'bg-slate-200 text-slate-600'
                                     }`}>
                                     {s.status}
                                 </span>
@@ -615,46 +615,46 @@ const FacultyDashboard = () => {
             <div className="bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse min-w-[600px]">
-                    <thead>
-                        <tr className="border-b border-indigo-50">
-                            <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Student Info</th>
-                            <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-50">
-                        {sessionRecords.sort((a, b) => a.name.localeCompare(b.name)).map(s => (
-                            <tr key={s.userId} className="group hover:bg-slate-50/50 transition duration-300">
-                                <td className="px-8 py-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 font-bold group-hover:scale-110 transition">
-                                            {s.name.charAt(0)}
+                        <thead>
+                            <tr className="border-b border-indigo-50">
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Student Info</th>
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-50">
+                            {sessionRecords.sort((a, b) => a.name.localeCompare(b.name)).map(s => (
+                                <tr key={s.userId} className="group hover:bg-slate-50/50 transition duration-300">
+                                    <td className="px-8 py-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 font-bold group-hover:scale-110 transition">
+                                                {s.name.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-slate-800">{s.name}</p>
+                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{s.regNumber}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="font-bold text-slate-800">{s.name}</p>
-                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{s.regNumber}</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="px-8 py-6 text-right">
-                                    <button
-                                        onClick={() => toggleAttendanceManual(s)}
-                                        disabled={processing}
-                                        className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase transition shadow-sm ${s.present
+                                    </td>
+                                    <td className="px-8 py-6 text-right">
+                                        <button
+                                            onClick={() => toggleAttendanceManual(s)}
+                                            disabled={processing}
+                                            className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase transition shadow-sm ${s.present
                                                 ? 'bg-white border border-red-200 text-red-600 hover:bg-red-50'
                                                 : 'bg-indigo-600 text-white hover:bg-indigo-700'
-                                            }`}
-                                    >
-                                        {s.present ? 'Mark Absent' : 'Mark Present'}
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                                }`}
+                                        >
+                                            {s.present ? 'Mark Absent' : 'Mark Present'}
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
 
     return (
         <div className="h-screen w-full bg-slate-50 flex overflow-hidden">
@@ -701,44 +701,79 @@ const FacultyDashboard = () => {
 
             {/* Main Content */}
             <div className="flex-1 h-full flex flex-col min-w-0 overflow-y-auto">
-                <header className="h-20 lg:h-24 bg-white/50 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-4 lg:px-12 sticky top-0 z-30 w-full shrink-0">
-                    <div className="flex items-center gap-4">
-                        <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden p-2 text-indigo-600 hover:bg-slate-100 rounded-xl transition">
-                            <Menu className="w-6 h-6" />
-                        </button>
-                        <h3 className="text-xl lg:text-2xl font-black text-slate-800 capitalize tracking-tight whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px] lg:max-w-none">{activeTab}</h3>
-                        
-                        {activeTab === 'dashboard' && (
-                            <button 
-                                onClick={openCreate}
-                                className="ml-2 lg:ml-6 bg-indigo-600 hover:bg-indigo-700 text-white px-3 lg:px-5 py-2 lg:py-2.5 rounded-xl lg:rounded-2xl shadow-xl shadow-indigo-100 transition flex items-center gap-2 group active:scale-95"
-                            >
-                                <Plus className="w-4 h-4 lg:w-5 lg:h-5 group-hover:rotate-90 transition-transform duration-300" />
-                                <span className="text-xs lg:text-sm font-black uppercase tracking-widest">Create</span>
-                            </button>
-                        )}
-                    </div>
-                    <div className="flex items-center gap-3 lg:gap-4 bg-white p-1.5 lg:p-2 pr-3 lg:pr-4 rounded-2xl border border-slate-200 shadow-sm max-w-[200px] lg:max-w-none overflow-hidden text-ellipsis">
-                        <div className="w-12 h-12 bg-indigo-600 rounded-xl shadow-md flex items-center justify-center text-white font-black text-lg">
-                            {user.name?.charAt(0)}
-                        </div>
-                        <div className="text-left px-2">
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Signed in as</p>
-                            <p className="text-sm font-black text-slate-800">{user.name}</p>
-                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider truncate max-w-[120px]">{user.faculty?.department}</p>
-                        </div>
-                        <div className="pl-4 border-l border-slate-100 ml-2">
+                <header className="sticky top-0 z-30 w-full shrink-0 h-20 lg:h-24 bg-white/50 backdrop-blur-md border-b border-slate-200 px-4 lg:px-12">
+                    <div className="flex h-full items-center justify-between gap-2">
+
+                        {/* Left */}
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+
+                            {/* Sidebar Toggle */}
                             <button
-                                onClick={handleLogout}
-                                className="flex items-center justify-center p-3 text-red-500 hover:bg-red-50 rounded-xl transition group"
-                                title="Sign Out"
+                                onClick={() => setIsSidebarOpen(true)}
+                                className="lg:hidden shrink-0 p-2 text-indigo-600 hover:bg-slate-100 rounded-xl transition"
                             >
-                                <LogOut className="w-5 h-5" />
+                                <Menu className="w-6 h-6" />
                             </button>
+
+                            {/* Page Title */}
+                            <h3 className="truncate text-lg lg:text-2xl font-black text-slate-800 capitalize tracking-tight">
+                                {activeTab}
+                            </h3>
+
+                            {/* Create Button */}
+                            {activeTab === "dashboard" && (
+                                <button
+                                    onClick={openCreate}
+                                    className="ml-auto lg:ml-6 shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white p-2 lg:px-5 lg:py-2.5 rounded-xl lg:rounded-2xl shadow-xl shadow-indigo-100 transition flex items-center gap-2 group active:scale-95"
+                                >
+                                    <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+
+                                    <span className="hidden sm:inline text-sm font-black uppercase tracking-widest">
+                                        Create
+                                    </span>
+                                </button>
+                            )}
+
                         </div>
+
+                        {/* Right */}
+                        <div className="flex shrink-0 items-center gap-2 bg-white rounded-2xl border border-slate-200 shadow-sm px-2 py-2">
+
+                            {/* Avatar */}
+                            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-indigo-600 rounded-xl shadow-md flex items-center justify-center text-white font-black text-base lg:text-lg">
+                                {user.name?.charAt(0)}
+                            </div>
+
+                            {/* User Info */}
+                            <div className="hidden md:block min-w-0">
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                    Signed in as
+                                </p>
+
+                                <p className="text-sm font-black text-slate-800 truncate max-w-[120px]">
+                                    {user.name}
+                                </p>
+
+                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider truncate max-w-[120px]">
+                                    {user.faculty?.department}
+                                </p>
+                            </div>
+
+                            {/* Logout */}
+                            <div className="border-l border-slate-100 pl-2 lg:pl-4 ml-1 lg:ml-2">
+                                <button
+                                    onClick={handleLogout}
+                                    className="flex items-center justify-center p-2 lg:p-3 text-red-500 hover:bg-red-50 rounded-xl transition"
+                                    title="Sign Out"
+                                >
+                                    <LogOut className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                        </div>
+
                     </div>
                 </header>
-
                 <main className="p-4 lg:p-12 max-w-7xl mx-auto w-full">
                     {activeTab === 'dashboard' && renderDashboard()}
                     {activeTab === 'timetable' && renderTimetable()}
